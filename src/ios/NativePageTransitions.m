@@ -13,9 +13,14 @@
     self.transitionView = self.webView;
 
     // Look to see if a WKWebView exists
-    for (int i = 0; i < self.webView.superview.subviews.count; i++) {
-        UIView *subview = [self.webView.superview.subviews objectAtIndex:i];
-        self.transitionView = self.wkWebView = (WKWebView *)subview;
+    Class wkWebViewClass = NSClassFromString(@"WKWebView");
+    if (wkWebViewClass) {
+        for (int i = 0; i < self.webView.superview.subviews.count; i++) {
+            UIView *subview = [self.webView.superview.subviews objectAtIndex:i];
+            if ([subview isKindOfClass:wkWebViewClass]) {
+                self.transitionView = self.wkWebView = (WKWebView *)subview;
+            }
+        }
     }
 
     // webview height may differ from screen height because of a statusbar
